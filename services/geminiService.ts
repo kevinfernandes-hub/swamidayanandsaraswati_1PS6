@@ -2,7 +2,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { GeminiResponse, Language } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 export const analyzeBreakdown = async (description: string, lang: Language): Promise<GeminiResponse> => {
   const languageNames: Record<Language, string> = {
