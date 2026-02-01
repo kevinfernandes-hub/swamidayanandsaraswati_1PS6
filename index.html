@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Roadside Assistance - India</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --indian-saffron: #FF9933;
+            --indian-white: #FFFFFF;
+            --indian-green: #138808;
+            --indian-blue: #000080;
+        }
+        body {
+            background-color: #fcfaf7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .7; transform: scale(1.05); }
+        }
+        @keyframes progress {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(200%); }
+        }
+        
+        /* Antigravity Floating Animation */
+        @keyframes antigravity-float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-4px) rotate(0.5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(-2px) rotate(-0.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .antigravity {
+            animation: antigravity-float 6s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .bg-saffron { background-color: var(--indian-saffron); }
+        .text-saffron { color: var(--indian-saffron); }
+        .bg-india-green { background-color: var(--indian-green); }
+        .text-india-green { color: var(--indian-green); }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

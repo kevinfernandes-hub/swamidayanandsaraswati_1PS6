@@ -1,0 +1,8 @@
+
+{
+  "name": "Smart Roadside Assistance",
+  "description": "A stress-free, mobile-first web application designed to provide instant roadside help during vehicle breakdowns with simple controls and clear status updates.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
