@@ -3,9 +3,9 @@ import React from 'react';
 import { AssistanceStatus, Language } from '../types';
 import { translations } from '../translations';
 
-interface LocationStatusProps { 
-  status: AssistanceStatus; 
-  error: string | null; 
+interface LocationStatusProps {
+  status: AssistanceStatus;
+  error: string | null;
   lang: Language;
 }
 
@@ -19,7 +19,7 @@ const LocationStatus: React.FC<LocationStatusProps> = ({ status, error, lang }) 
         text: t.errorTitle,
         color: 'bg-red-50 border-red-100',
         pulse: false,
-        subtext: t.errorSub
+        subtext: error // Display the actual error message
       };
     }
 
