@@ -10,6 +10,7 @@ import { translations } from './translations';
 
 const App: React.FC = () => {
   const [lang, setLang] = useState<Language>('en');
+  const [userLoc, setUserLoc] = useState<{ lat: number, lng: number }>({ lat: 21.1458, lng: 79.0882 }); // Default Nagpur
   const [status, setStatus] = useState<AssistanceStatus>(AssistanceStatus.IDLE);
   const [request, setRequest] = useState<AssistanceRequest | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -96,12 +97,14 @@ const App: React.FC = () => {
 
       // Call backend API
       const { submitAssistanceRequest } = await import('./services/api');
-      const backendResponse = await submitAssistanceRequest({
-        user_text: isPanic ? "ACCIDENT EMERGENCY PANIC" : (description || "Roadside assistance required"),
-        user_location: { lat: location.lat, lon: location.lng },
+      const text = isPanic ? "ACCIDENT EMERGENCY PANIC" : (description || "Roadside assistance required");
+      const payload = {
+        user_text: text,
+        user_location: { lat: userLoc.lat, lon: userLoc.lng },
         request_count_last_10_min: 0,
         cancel_count_today: 0
-      });
+      };
+      const backendResponse = await submitAssistanceRequest(payload);
 
       // Handle "waiting_for_location" response (shouldn't happen now, but keep as fallback)
       if (backendResponse.status === "waiting_for_location") {
@@ -143,10 +146,9 @@ const App: React.FC = () => {
   const setMockLocation = () => {
     // Mock location (Nagpur - Zero Mile Stone)
     const mockLoc = { lat: 21.1458, lng: 79.0882 };
+    setUserLoc(mockLoc);
     console.log('📍 Using Mock Location (Nagpur):', mockLoc);
     alert('Mock location set: Nagpur (Zero Mile). Now try requesting help!');
-    // We don't actually set state here, we'll change handleRequestHelp to use it if needed
-    (window as any).__MOCK_LOCATION = mockLoc;
   };
 
   return (
@@ -182,6 +184,7 @@ const App: React.FC = () => {
                 status={status}
                 onCancel={handleReset}
                 lang={lang}
+                userLocation={userLoc}
               />
             )}
 
