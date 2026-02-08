@@ -2,15 +2,17 @@
 import React from 'react';
 import { AssistanceStatus, AssistanceRequest, Language } from '../types';
 import { translations } from '../translations';
+import MapDisplay from './MapDisplay';
 
 interface DashboardCardProps {
   request: AssistanceRequest;
   status: AssistanceStatus;
   onCancel: () => void;
   lang: Language;
+  userLocation: { lat: number; lng: number };
 }
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel, lang }) => {
+const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel, lang, userLocation }) => {
   const t = translations[lang];
   const isAssigned = status === AssistanceStatus.MECHANIC_ASSIGNED;
 
@@ -63,7 +65,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel
               return (
                 <div key={step.key} className="flex items-center gap-4 group">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${stepStatus === 'complete' ? 'bg-green-600 text-white' :
-                      stepStatus === 'loading' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100 pulse' : 'bg-slate-100 text-slate-300'
+                    stepStatus === 'loading' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100 pulse' : 'bg-slate-100 text-slate-300'
                     }`}>
                     <i className={`fa-solid ${stepStatus === 'complete' ? 'fa-check' : step.icon}`}></i>
                   </div>
@@ -86,6 +88,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel
 
         {isAssigned && request.mechanic && (
           <div className="space-y-6 animate-in slide-in-from-top-4 duration-500">
+            {request.mechanic.lat && request.mechanic.lon && (
+              <MapDisplay
+                userLoc={userLocation}
+                mechanicLoc={{ lat: request.mechanic.lat, lng: request.mechanic.lon }}
+                mechanicName={request.mechanic.name}
+              />
+            )}
+
             <div className="flex items-center gap-5 p-4 bg-slate-50 rounded-3xl border border-slate-100">
               <div className="relative">
                 <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-white shadow-md">
