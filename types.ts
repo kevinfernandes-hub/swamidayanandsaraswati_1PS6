@@ -21,6 +21,8 @@ export interface MechanicInfo {
   phone: string;
   rating: number;
   capability: string;
+  lat?: number;
+  lon?: number;
 }
 
 export interface AssistanceRequest {

@@ -43,6 +43,10 @@ class AssistanceResponse(BaseModel):
     status: str
     priority: Optional[str] = None
     mechanic_id: Optional[str] = None
+    mechanic_name: Optional[str] = None
+    mechanic_phone: Optional[str] = None
+    mechanic_lat: Optional[float] = None
+    mechanic_lon: Optional[float] = None
     eta_minutes: Optional[int] = None
     issue_type: Optional[str] = None
 
@@ -104,4 +108,4 @@ def get_status(distance_meters: int):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=9000)

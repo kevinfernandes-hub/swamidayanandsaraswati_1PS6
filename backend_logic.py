@@ -1,5 +1,7 @@
 import math
 import gemini_service
+import osm_service
+import osrm_service
 import logging
 
 logger = logging.getLogger(__name__)
@@ -102,8 +104,10 @@ def handle_assistance_request(data):
     def osrm_eta(origin, destination):
         if not origin or not destination:
             return -1
-        dist = calculate_distance(origin, destination)
-        return int(dist * 10)
+        route = osrm_service.get_route(origin, destination)
+        if route:
+            return route['duration_min']
+        return -1
 
     # --- Step 1: Issue Extraction ---
     user_text = data.get("user_text", "")
@@ -162,32 +166,47 @@ def handle_assistance_request(data):
           "status": "waiting_for_location"
         }
 
-    # --- Step 6: Service Center Selection ---
-    service_center = nearest_service_center(user_location)
-
-    # --- Step 7: Mechanic Selection ---
-    mechanic = nearest_available_mechanic(service_center, user_location)
-
-    # --- Step 8: ETA Calculation ---
-    eta = osrm_eta(mechanic["location"], user_location)
-    final_eta = eta if eta >= 0 else None
-
-    # --- Step 9: Initial Response ---
-    res_msg = "Help is on the way"
-    if emergency_flag:
-        res_msg = "Emergency services have been notified"
+    # --- Step 6: Real Service Discovery (OSM) ---
+    nearby_services = osm_service.get_real_assistance(user_location['lat'], user_location['lon'], issue_type)
     
-    # Use LLM suggested action if available
+    if not nearby_services:
+        return {
+            "message": "We couldn't find any specialized help nearby. Please call 112 for emergency assistance.",
+            "status": "no_services_found",
+            "priority": priority
+        }
+
+    # Selection: take the closest one
+    selected_service = nearby_services[0]
+
+    # --- Step 7: ETA Calculation ---
+    eta = osrm_eta(selected_service, user_location)
+    final_eta = eta if eta >= 0 else 15 # Fallback eta
+
+    # --- Step 8: Contact Details ---
+    # In a real app, you might check if they have WhatsApp. 
+    # For now, we assume the phone number is available for SMS/Call.
+    
+    # --- Step 9: Initial Response ---
+    res_msg = f"Help is coming from {selected_service['name']}"
+    if emergency_flag:
+        res_msg = f"Emergency assistance requested from {selected_service['name']} (Type: {selected_service['type']})."
+    
+    # Use LLM suggested action if available as additional info
     if suggested_action:
-        res_msg = suggested_action
+        res_msg += f" {suggested_action}"
 
     return {
       "message": res_msg,
       "priority": priority,
-      "mechanic_id": mechanic["id"],
+      "mechanic_id": str(selected_service['id']),
+      "mechanic_name": selected_service['name'],
+      "mechanic_phone": selected_service['phone'],
+      "mechanic_lat": selected_service['lat'],
+      "mechanic_lon": selected_service['lon'],
       "eta_minutes": final_eta,
       "status": "assigned",
-      "issue_type": issue_type # Include for frontend clarity
+      "issue_type": issue_type
     }
 
 if __name__ == "__main__":

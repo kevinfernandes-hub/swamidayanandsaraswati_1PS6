@@ -113,22 +113,18 @@ const App: React.FC = () => {
       setStatus(AssistanceStatus.CALCULATING_ETA);
       await delay(800);
 
-      const mockMechanicNames = {
-        en: "Reliable Auto Care",
-        hi: "भरोसेमंद ऑटो केयर",
-        mr: "विश्वासू ऑटो केअर"
+      const assignedMechanic: MechanicInfo = {
+        name: backendResponse.mechanic_name || "Independent Service",
+        distance: "Nearby",
+        eta: backendResponse.eta_minutes ? `${backendResponse.eta_minutes} mins` : "15 mins",
+        phone: backendResponse.mechanic_phone || "+91 0000000000",
+        rating: 4.5,
+        capability: (backendResponse.priority === 'emergency' || backendResponse.issue_type === 'accident') ? t.emergency : "Verified Mechanic",
+        lat: backendResponse.mechanic_lat,
+        lon: backendResponse.mechanic_lon
       };
 
-      const mockMechanic: MechanicInfo = {
-        name: mockMechanicNames[lang],
-        distance: "2.5 km",
-        eta: backendResponse.eta_minutes ? `${backendResponse.eta_minutes} mins` : "12 mins",
-        phone: "+91 9876543210",
-        rating: 4.8,
-        capability: backendResponse.priority === 'emergency' ? t.emergency : "Expert Mechanic"
-      };
-
-      setRequest(prev => prev ? { ...prev, mechanic: mockMechanic } : null);
+      setRequest(prev => prev ? { ...prev, mechanic: assignedMechanic } : null);
       setStatus(AssistanceStatus.MECHANIC_ASSIGNED);
 
     } catch (err: any) {
@@ -145,10 +141,10 @@ const App: React.FC = () => {
   };
 
   const setMockLocation = () => {
-    // Mock location (Mumbai - Gateway of India)
-    const mockLoc = { lat: 18.9220, lng: 72.8347 };
-    console.log('📍 Using Mock Location:', mockLoc);
-    alert('Mock location set: Mumbai (Gateway of India). Now try requesting help!');
+    // Mock location (Nagpur - Zero Mile Stone)
+    const mockLoc = { lat: 21.1458, lng: 79.0882 };
+    console.log('📍 Using Mock Location (Nagpur):', mockLoc);
+    alert('Mock location set: Nagpur (Zero Mile). Now try requesting help!');
     // We don't actually set state here, we'll change handleRequestHelp to use it if needed
     (window as any).__MOCK_LOCATION = mockLoc;
   };

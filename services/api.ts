@@ -3,7 +3,7 @@
  * Use this to connect to your backend on the different PC.
  */
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:9000';
 
 export const apiClient = {
     // Example GET request
@@ -50,7 +50,12 @@ export interface AssistanceResponsePayload {
     status: string;
     priority?: string;
     mechanic_id?: string;
+    mechanic_name?: string;
+    mechanic_phone?: string;
+    mechanic_lat?: number;
+    mechanic_lon?: number;
     eta_minutes?: number;
+    issue_type?: string;
 }
 
 export const submitAssistanceRequest = async (

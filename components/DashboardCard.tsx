@@ -38,17 +38,16 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel
     <div className="w-full bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden animate-in zoom-in-95 duration-500">
       <div className={`p-6 transition-colors duration-500 ${isAssigned ? 'bg-green-50' : 'bg-orange-50'}`}>
         <div className="flex justify-between items-center mb-3">
-           <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-2.5 py-1 rounded-full ${
-             isAssigned ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
-           }`}>
-            {status === AssistanceStatus.EXPANDING_SEARCH ? t.expanding : 
-             isAssigned ? t.assigned : 'Processing...'}
+          <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-2.5 py-1 rounded-full ${isAssigned ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
+            }`}>
+            {status === AssistanceStatus.EXPANDING_SEARCH ? t.expanding :
+              isAssigned ? t.assigned : 'Processing...'}
           </span>
           {status === AssistanceStatus.EXPANDING_SEARCH && (
-             <div className="flex items-center gap-1.5 px-2 py-1 bg-yellow-100 rounded-lg text-yellow-800 text-[10px] font-bold">
-               <i className="fa-solid fa-expand animate-pulse"></i>
-               {t.expanding}
-             </div>
+            <div className="flex items-center gap-1.5 px-2 py-1 bg-yellow-100 rounded-lg text-yellow-800 text-[10px] font-bold">
+              <i className="fa-solid fa-expand animate-pulse"></i>
+              {t.expanding}
+            </div>
           )}
         </div>
         <h3 className="text-2xl font-black text-slate-800 leading-tight">
@@ -63,22 +62,20 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel
               const stepStatus = getStepStatus(step.key);
               return (
                 <div key={step.key} className="flex items-center gap-4 group">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                    stepStatus === 'complete' ? 'bg-green-600 text-white' : 
-                    stepStatus === 'loading' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100 pulse' : 'bg-slate-100 text-slate-300'
-                  }`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${stepStatus === 'complete' ? 'bg-green-600 text-white' :
+                      stepStatus === 'loading' ? 'bg-orange-500 text-white shadow-lg shadow-orange-100 pulse' : 'bg-slate-100 text-slate-300'
+                    }`}>
                     <i className={`fa-solid ${stepStatus === 'complete' ? 'fa-check' : step.icon}`}></i>
                   </div>
                   <div className="flex-1">
-                    <p className={`text-sm font-bold transition-colors ${
-                      stepStatus === 'pending' ? 'text-slate-300' : 'text-slate-800'
-                    }`}>
+                    <p className={`text-sm font-bold transition-colors ${stepStatus === 'pending' ? 'text-slate-300' : 'text-slate-800'
+                      }`}>
                       {step.label}
                     </p>
                     {stepStatus === 'loading' && (
-                       <div className="h-1 w-24 bg-orange-100 rounded-full mt-1 overflow-hidden">
-                          <div className="h-full bg-orange-500 w-1/2 animate-[progress_1.5s_infinite]"></div>
-                       </div>
+                      <div className="h-1 w-24 bg-orange-100 rounded-full mt-1 overflow-hidden">
+                        <div className="h-full bg-orange-500 w-1/2 animate-[progress_1.5s_infinite]"></div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -89,7 +86,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel
 
         {isAssigned && request.mechanic && (
           <div className="space-y-6 animate-in slide-in-from-top-4 duration-500">
-             <div className="flex items-center gap-5 p-4 bg-slate-50 rounded-3xl border border-slate-100">
+            <div className="flex items-center gap-5 p-4 bg-slate-50 rounded-3xl border border-slate-100">
               <div className="relative">
                 <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-white shadow-md">
                   <img src={`https://api.dicebear.com/7.x/initials/svg?seed=${request.mechanic.name}`} alt="Avatar" className="w-full h-full bg-orange-100" />
@@ -123,39 +120,55 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ request, status, onCancel
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <a 
-                href={`tel:${request.mechanic.phone}`}
-                className="flex-[2] bg-green-600 hover:bg-green-700 active:scale-95 text-white font-black py-5 rounded-3xl text-center shadow-xl shadow-green-100 flex items-center justify-center gap-3 transition-all"
-              >
-                <i className="fa-solid fa-phone-flip text-xl"></i>
-                {t.callBtn}
-              </a>
-              <button 
-                onClick={onCancel}
-                className="flex-1 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-500 font-bold py-5 rounded-3xl transition-all"
-              >
-                {t.cancelBtn}
-              </button>
+            <div className="flex flex-col gap-3">
+              <div className="flex gap-3">
+                <a
+                  href={`tel:${request.mechanic.phone}`}
+                  className="flex-[2] bg-green-600 hover:bg-green-700 active:scale-95 text-white font-black py-5 rounded-3xl text-center shadow-xl shadow-green-100 flex items-center justify-center gap-3 transition-all"
+                >
+                  <i className="fa-solid fa-phone-flip text-xl"></i>
+                  {t.callBtn}
+                </a>
+                <button
+                  onClick={onCancel}
+                  className="flex-1 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-500 font-bold py-5 rounded-3xl transition-all"
+                >
+                  {t.cancelBtn}
+                </button>
+              </div>
+
+              {request.location && (
+                <a
+                  href={`https://wa.me/${request.mechanic.phone.replace(/\s+/g, '')}?text=${encodeURIComponent(
+                    `HELP! I am stuck and need assistance. \nIssue: ${request.issueType}\nMy Location: https://www.google.com/maps?q=${request.location.lat},${request.location.lng}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366] hover:bg-[#128C7E] active:scale-95 text-white font-black py-4 rounded-3xl text-center shadow-lg flex items-center justify-center gap-3 transition-all"
+                >
+                  <i className="fa-brands fa-whatsapp text-2xl"></i>
+                  SEND LOCATION VIA WHATSAPP
+                </a>
+              )}
             </div>
           </div>
         )}
 
         {request.issueType && (
-           <div className="pt-4 border-t border-dashed border-slate-200">
-              <div className="flex items-center justify-between">
-                <div>
-                   <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{t.loggedProb}</p>
-                   <p className="text-slate-700 font-bold">{request.issueType}</p>
-                </div>
-                <div className="text-right">
-                   <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{t.priority}</p>
-                   <p className={`font-bold ${request.severity === 'Critical' ? 'text-red-600' : 'text-orange-500'}`}>
-                      {request.severity === 'Critical' ? t.emergency : 'Priority'}
-                   </p>
-                </div>
+          <div className="pt-4 border-t border-dashed border-slate-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{t.loggedProb}</p>
+                <p className="text-slate-700 font-bold">{request.issueType}</p>
               </div>
-           </div>
+              <div className="text-right">
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{t.priority}</p>
+                <p className={`font-bold ${request.severity === 'Critical' ? 'text-red-600' : 'text-orange-500'}`}>
+                  {request.severity === 'Critical' ? t.emergency : 'Priority'}
+                </p>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
