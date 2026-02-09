@@ -159,7 +159,7 @@ const App: React.FC = () => {
       <div className="w-full flex justify-between items-center px-4 py-2 bg-slate-100 rounded-xl mb-4 text-[10px] font-mono text-slate-500 border border-slate-200">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-          <span>Backend: http://localhost:8000</span>
+          <span>Backend: http://localhost:9000</span>
         </div>
         <button
           onClick={setMockLocation}

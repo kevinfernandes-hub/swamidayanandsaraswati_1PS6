@@ -2,7 +2,7 @@ import requests
 import json
 
 # Test the backend API
-url = "http://localhost:8000/api/request-assistance"
+url = "http://localhost:9000/api/request-assistance"
 
 # Test 1: Normal request
 print("Test 1: Normal Request")

@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
+import os
 import backend_logic
 
 import logging
@@ -56,7 +57,7 @@ def read_root():
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "connected", "backend_port": 8000}
+    return {"status": "connected", "backend_port": int(os.environ.get("PORT", 9000))}
 
 @app.post("/api/request-assistance", response_model=AssistanceResponse)
 def request_assistance(request: AssistanceRequest):
@@ -108,4 +109,5 @@ def get_status(distance_meters: int):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=9000)
+    port = int(os.environ.get("PORT", 9000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
