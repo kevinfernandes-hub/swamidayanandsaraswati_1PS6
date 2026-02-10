@@ -14,6 +14,8 @@ const App: React.FC = () => {
   const [status, setStatus] = useState<AssistanceStatus>(AssistanceStatus.IDLE);
   const [request, setRequest] = useState<AssistanceRequest | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [backendReady, setBackendReady] = useState<boolean | null>(null); // null = checking, true = ok, false = down
+
 
   const t = translations[lang];
 
@@ -23,12 +25,18 @@ const App: React.FC = () => {
         const { apiClient } = await import('./services/api');
         const health = await apiClient.get('/api/health');
         console.log('✅ Backend Connection Verified:', health);
+        setBackendReady(true);
       } catch (err) {
         console.error('❌ Backend Connection Failed:', err);
+        setBackendReady(false);
       }
     };
     checkConnection();
+    // Re-check periodically
+    const interval = setInterval(checkConnection, 10000);
+    return () => clearInterval(interval);
   }, []);
+
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -132,10 +140,15 @@ const App: React.FC = () => {
 
     } catch (err: any) {
       console.error(err);
-      setError(t.errorTitle);
+      if (!backendReady) {
+        setError("Backend server is not responding. Please make sure to start it using 'npm run start-backend' or 'start.bat'.");
+      } else {
+        setError(t.errorTitle);
+      }
       setStatus(AssistanceStatus.ERROR);
     }
   };
+
 
   const handleReset = () => {
     setStatus(AssistanceStatus.IDLE);
@@ -158,8 +171,12 @@ const App: React.FC = () => {
       {/* Dev Tools - Only for debugging */}
       <div className="w-full flex justify-between items-center px-4 py-2 bg-slate-100 rounded-xl mb-4 text-[10px] font-mono text-slate-500 border border-slate-200">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-          <span>Backend: http://localhost:9000</span>
+          <span className={`w-2 h-2 rounded-full ${backendReady === true ? 'bg-green-500' : backendReady === false ? 'bg-red-500' : 'bg-yellow-500'} ${backendReady !== false ? 'animate-pulse' : ''}`}></span>
+          <span>
+            {backendReady === true ? 'Backend: Connected (Port 9000)' :
+              backendReady === false ? 'Backend: DISCONNECTED (Run start.bat)' :
+                'Backend: Checking connection...'}
+          </span>
         </div>
         <button
           onClick={setMockLocation}
@@ -168,6 +185,7 @@ const App: React.FC = () => {
           USE MOCK GPS
         </button>
       </div>
+
 
       <main className="w-full space-y-6 mt-4 pb-20">
         {status === AssistanceStatus.IDLE && (
